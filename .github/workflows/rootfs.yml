@@ -33,7 +33,7 @@ jobs:
           sudo mount -o loop "$ISO_NAME" /tmp/iso || exit 1
           sudo cp /tmp/iso/images/rootfs.img /tmp/ || exit 1
           sudo umount "$ISO_NAME" && sudo rm "$ISO_NAME"
-          sudo mount -o /tmp/rootfs.img /tmp/img || exit 1
+          sudo mount /tmp/rootfs.img /tmp/img || exit 1
       - name: Compressing rootfs
         run: |
           cd /tmp/img && sudo tar -I 'zstd -10 -T0' -cf ../clear_linux_rootfs.tar.zst * && cd -
