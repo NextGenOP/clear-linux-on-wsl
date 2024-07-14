@@ -1,0 +1,46 @@
+name: Generate Rootfs for WSL
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 20 4 * * 6/2
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Clear Linux version
+        id: ver
+        run: |
+          ver=$(curl -s "https://cdn.download.clearlinux.org/latest")
+          if [[ "$ver" = "41150" ]]; then ver="41160"; fi
+          echo "CLEAR_LINUX_VERSION=$ver" >> $GITHUB_ENV
+      - name: Download Clear Linux ISO
+        run: |
+          iso_name="clear-$CLEAR_LINUX_VERSION-live-server.iso"
+          echo "ISO_NAME=$iso_name" >> $GITHUB_ENV
+          iso_url="https://cdn.download.clearlinux.org/releases/$CLEAR_LINUX_VERSION/clear/$iso_name"
+          wget_status=$(wget --server-response "$iso_url" 2>&1 | grep -F 'HTTP/' | tail -1 | sed -r "s/^.*HTTP\/[0-9\.]+ ([0-9]+).*$/\1/")
+          if [[ "$wget_status" != 200 ]]; then
+            echo "ERROR: Wrong response status code ($wget_status), check your internet connection & file ($iso_url) availability"
+            exit 1
+          fi
+      - name: Mounting rootfs
+        run: |
+          sudo mkdir -p /tmp/iso /tmp/img || exit 1
+          sudo mount -o loop "$ISO_NAME" /mnt/clr || exit 1
+          sudo cp /tmp/iso/images/rootfs.img /tmp/ || exit 1
+          sudo unmount "$ISO_NAME" && sudo rm "$ISO_NAME"
+          sudo mount -o /tmp/rootfs.img" /tmp/img || exit 1
+      - name: Compressing rootfs
+        run: |
+          cd /tmp/img && sudo tar -I 'zstd -10 -T0' -cf ../clear_linux_rootfs.tar.zst * && cd -
+          sudo umount /tmp/rootfs.img && sudo rm /tmp/rootfs.img
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ steps.ver.outputs.CLEAR_LINUX_VERSION }}
+          tag_name: ${{ steps.ver.outputs.CLEAR_LINUX_VERSION }}
+          files: clear_linux_rootfs.tar.xz
