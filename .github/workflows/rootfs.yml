@@ -38,9 +38,15 @@ jobs:
         run: |
           cd /tmp/img && sudo tar -I 'zstd -10 -T0' -cf ../clear_linux_rootfs.tar.zst * && cd -
           sudo umount /tmp/img && sudo rm /tmp/rootfs.img
+      - name: Upload tarball as GitHub artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: clear_linux_rootfs.tar.zst
+          path: clear_linux_rootfs.tar.zst
+          if-no-files-found: error
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          name: ${{ steps.ver.outputs.CLEAR_LINUX_VERSION }}
-          tag_name: ${{ steps.ver.outputs.CLEAR_LINUX_VERSION }}
+          name: ${{ env.CLEAR_LINUX_VERSION }}
+          tag_name: ${{ env.CLEAR_LINUX_VERSION }}
           files: clear_linux_rootfs.tar.zst
