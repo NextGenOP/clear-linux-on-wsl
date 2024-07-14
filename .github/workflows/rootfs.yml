@@ -30,7 +30,7 @@ jobs:
       - name: Mounting rootfs
         run: |
           sudo mkdir -p /tmp/iso /tmp/img || exit 1
-          sudo mount -o loop "$ISO_NAME" /mnt/clr || exit 1
+          sudo mount -o loop "$ISO_NAME" /tmp/iso || exit 1
           sudo cp /tmp/iso/images/rootfs.img /tmp/ || exit 1
           sudo unmount "$ISO_NAME" && sudo rm "$ISO_NAME"
           sudo mount -o /tmp/rootfs.img" /tmp/img || exit 1
