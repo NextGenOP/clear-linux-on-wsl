@@ -42,11 +42,11 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: clear_linux_rootfs.tar.zst
-          path: clear_linux_rootfs.tar.zst
+          path: /tmp/clear_linux_rootfs.tar.zst
           if-no-files-found: error
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
           name: ${{ env.CLEAR_LINUX_VERSION }}
           tag_name: ${{ env.CLEAR_LINUX_VERSION }}
-          files: clear_linux_rootfs.tar.zst
+          files: /tmp/clear_linux_rootfs.tar.zst
