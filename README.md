@@ -24,8 +24,8 @@ Alternatively, you can install Clear Linux manually by following these steps:
 
 <a name="post-install">
 **Post-Installation Setup** 
----------------
 </a>
+---------------
 
 ### 1. Update the System
 
