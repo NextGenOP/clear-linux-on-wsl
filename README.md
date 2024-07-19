@@ -9,7 +9,7 @@ This repository provides a script to automate the installation of Clear Linux on
 To install Clear Linux on WSL, follow these steps:
 
 1. Run the `install-clear-linux.ps1` script from this repository to automate the installation process.
-2. Once the installation is complete, open Clear Linux and perform [post-installation setup](#post-install).
+2. Once the installation is complete, open Clear Linux and perform [post-installation setup](#post-installation-setup).
 
 ***Manual Installation***
 
@@ -20,12 +20,10 @@ Alternatively, you can install Clear Linux manually by following these steps:
 3. Run `wsl --update`.
 4. Run `wsl --import ClearLinux C:\wsl_distros\ClearLinux C:\wsl_distros\sources\clear_linux_rootfs.tar.zst --version 2`.
 5. Run `wsl --list --verbose` to see if Clear Linux is successfully installed.
-6. Once the installation is complete, open Clear Linux and perform [post-installation setup](#post-install).
+6. Once the installation is complete, open Clear Linux and perform [post-installation setup](#post-installation-setup).
 
-<a name="post-install">
-**Post-Installation Setup** 
-</a>
----------------
+
+## Post-Installation Setup
 
 ### 1. Update the System
 
