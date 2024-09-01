@@ -41,7 +41,7 @@ jobs:
           sudo mount /tmp/rootfs.img /tmp/img || exit 1
       - name: Compressing rootfs
         run: |
-          cd /tmp/img && sudo tar -I 'zstd -10 -T0' -cf ../clear_linux_rootfs.tar.zst * && cd -
+          cd /tmp/img && sudo tar -I 'zstd -15' -cf ../clear_linux_rootfs.tar.zst * && cd -
           sudo umount /tmp/img && sudo rm /tmp/rootfs.img
       - name: Upload tarball as GitHub artifact
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.upload_artifact == 'true'      
