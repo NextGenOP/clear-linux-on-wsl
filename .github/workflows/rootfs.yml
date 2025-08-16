@@ -24,9 +24,8 @@ jobs:
         run: |
           if [ "${{ github.event.inputs.cl_version }}" == "" ]; then
             ver=$(curl -s "https://cdn.download.clearlinux.org/latest")
-            if [[ "$ver" = "41150" ]]; then ver="41160"; then
+            if [[ "$ver" = "41150" ]]; then ver="41160"; fi
             echo "CLEAR_LINUX_VERSION=$ver" >> $GITHUB_ENV
-            fi
           else
              echo "CLEAR_LINUX_VERSION=${{ github.event.inputs.cl_version }}" >> $GITHUB_ENV
           fi
