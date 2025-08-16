@@ -7,6 +7,9 @@ on:
         required: true
         default: 'false'
         type: 'boolean'
+      cl_version:
+        description: 'CL Version'
+        required: false
   schedule:
     - cron: 20 4 * * 6/2
 
@@ -19,9 +22,13 @@ jobs:
     steps:
       - name: Get Clear Linux version
         run: |
-          ver=$(curl -s "https://cdn.download.clearlinux.org/latest")
-          if [[ "$ver" = "41150" ]]; then ver="41160"; fi
-          echo "CLEAR_LINUX_VERSION=$ver" >> $GITHUB_ENV
+          if [ "${{ github.event.inputs.cl_version }}" != "" ]; then
+            ver=$(curl -s "https://cdn.download.clearlinux.org/latest")
+            if [[ "$ver" = "41150" ]]; then ver="41160"; fi
+            echo "CLEAR_LINUX_VERSION=$ver" >> $GITHUB_ENV
+          else
+             echo "CLEAR_LINUX_VERSION=${{ github.event.inputs.cl_version }}" >> $GITHUB_ENV
+          fi
       - name: Download Clear Linux ISO
         run: |
           iso_name="clear-$CLEAR_LINUX_VERSION-live-server.iso"
